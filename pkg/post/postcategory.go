@@ -1,5 +1,6 @@
 package post
 
+// Category - категория Post
 type Category string
 
 const (
@@ -11,6 +12,7 @@ const (
 	FashionCategory     Category = "fashion"
 )
 
+// Valid проверяет валидность Category
 func (category Category) Valid() error {
 	switch category {
 	case MusicCategory, FunnyCategory, VideosCategory, ProgrammingCategory, NewsCategory, FashionCategory:

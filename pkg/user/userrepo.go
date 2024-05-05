@@ -4,11 +4,13 @@ import (
 	"sync"
 )
 
+// UsersMemoryRepository реализует интерфейс UsersRepo
 type UsersMemoryRepository struct {
 	mu   *sync.RWMutex
 	data map[string]*User
 }
 
+// NewUsersMemoryRepository возвращает экземпляр UsersMemoryRepository
 func NewUsersMemoryRepository() *UsersMemoryRepository {
 	return &UsersMemoryRepository{
 		mu:   &sync.RWMutex{},
@@ -16,6 +18,7 @@ func NewUsersMemoryRepository() *UsersMemoryRepository {
 	}
 }
 
+// Create создает и добавляет User
 func (repo *UsersMemoryRepository) Create(userName string) *User {
 	repo.mu.Lock()
 
@@ -28,6 +31,7 @@ func (repo *UsersMemoryRepository) Create(userName string) *User {
 	return u
 }
 
+// GetByID возвращает User c ID
 func (repo *UsersMemoryRepository) GetByID(userID string) (*User, error) {
 	repo.mu.RLock()
 	u, ok := repo.data[userID]
@@ -40,6 +44,7 @@ func (repo *UsersMemoryRepository) GetByID(userID string) (*User, error) {
 	return u, nil
 }
 
+// GetByUserName возвращает User с UserName
 func (repo *UsersMemoryRepository) GetByUserName(userName string) (*User, error) {
 	repo.mu.RLock()
 	defer repo.mu.RUnlock()

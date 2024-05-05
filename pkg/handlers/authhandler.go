@@ -9,11 +9,13 @@ import (
 	"net/http"
 )
 
+// AuthHandler - обработчик для регистрации
 type AuthHandler struct {
 	UsersRepo      user.UsersRepo
 	LoginFormsRepo loginform.LoginFormsRepo
 }
 
+// NewAuthHandler создает экземпляр AuthHandler
 func NewAuthHandler(usersRepo user.UsersRepo, loginFormsRepo loginform.LoginFormsRepo) *AuthHandler {
 	return &AuthHandler{
 		UsersRepo:      usersRepo,
@@ -21,6 +23,7 @@ func NewAuthHandler(usersRepo user.UsersRepo, loginFormsRepo loginform.LoginForm
 	}
 }
 
+// Register обрабатывает запрос на регистрации
 func (handler *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	f, err := handler.getBodyType(r)
 	if err != nil {
@@ -65,6 +68,7 @@ func (handler *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// Login обрабатывает запрос на авторизацию
 func (handler *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	f, err := handler.getBodyType(r)
 	if err != nil {

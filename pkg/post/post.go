@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// Post - тип поста
 type Post struct {
 	ID       string     `json:"id"`
 	Author   *user.User `json:"author"`
@@ -17,6 +18,7 @@ type Post struct {
 	Views    uint32     `json:"views"`
 }
 
+// NewPost создает экземпляр Post
 func NewPost(author *user.User, title, text string, category Category, tp Type) (*Post, error) {
 	err := category.Valid()
 	if err != nil {
@@ -40,12 +42,15 @@ func NewPost(author *user.User, title, text string, category Category, tp Type) 
 	}, nil
 }
 
+// Posts - массив ссылок на Post
 type Posts []*Post
 
+// Append добавляет Post в Posts
 func (posts *Posts) Append(post *Post) {
 	*posts = append(*posts, post)
 }
 
+// PostsRepo - интерфейс для хранения Post
 type PostsRepo interface {
 	Create(author *user.User, title, text string, category Category, tp Type) (*Post, error)
 	Get(postID string) (*Post, error)

@@ -4,11 +4,13 @@ import (
 	"sync"
 )
 
+// LoginFormsMemoryRepository реализует интерфейс LoginFormsRepo
 type LoginFormsMemoryRepository struct {
 	mu   *sync.RWMutex
 	data map[string]*LoginForm
 }
 
+// NewLoginFormsMemoryRepository создает экземпляр LoginFormsMemoryRepository
 func NewLoginFormsMemoryRepository() *LoginFormsMemoryRepository {
 	return &LoginFormsMemoryRepository{
 		mu:   &sync.RWMutex{},
@@ -16,6 +18,7 @@ func NewLoginFormsMemoryRepository() *LoginFormsMemoryRepository {
 	}
 }
 
+// SignIn выполняет авторизацию
 func (repo *LoginFormsMemoryRepository) SignIn(login, pass string) error {
 	repo.mu.RLock()
 	form, ok := repo.data[login]
@@ -32,6 +35,7 @@ func (repo *LoginFormsMemoryRepository) SignIn(login, pass string) error {
 	return nil
 }
 
+// SignUp выполняет регистрацию
 func (repo *LoginFormsMemoryRepository) SignUp(login, pass string) error {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()

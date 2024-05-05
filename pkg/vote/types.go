@@ -1,5 +1,6 @@
 package vote
 
+// Type - режим голосования
 type Type int
 
 const (

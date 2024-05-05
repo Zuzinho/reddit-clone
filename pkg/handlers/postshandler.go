@@ -11,6 +11,7 @@ import (
 	"strconv"
 )
 
+// PostsHandler - обработчик для работы с Post
 type PostsHandler struct {
 	PostsRepo    post.PostsRepo
 	UsersRepo    user.UsersRepo
@@ -18,6 +19,7 @@ type PostsHandler struct {
 	VotesRepo    vote.VotesRepo
 }
 
+// NewPostsHandler создает экземпляр PostsHandler
 func NewPostsHandler(postsRepo post.PostsRepo, usersRepo user.UsersRepo, commentsRepo comment.CommentsRepo, votesRepo vote.VotesRepo) *PostsHandler {
 	return &PostsHandler{
 		PostsRepo:    postsRepo,
@@ -27,6 +29,7 @@ func NewPostsHandler(postsRepo post.PostsRepo, usersRepo user.UsersRepo, comment
 	}
 }
 
+// GetAll обрабатывает запрос на получение всех Post
 func (handler *PostsHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	posts := handler.PostsRepo.GetAll()
 
@@ -49,6 +52,7 @@ func (handler *PostsHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// AddPost обрабатывает запрос на добавление Post
 func (handler *PostsHandler) AddPost(w http.ResponseWriter, r *http.Request) {
 	var f createPostForm
 
@@ -101,6 +105,7 @@ func (handler *PostsHandler) AddPost(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
+// GetAllByCategory обрабатывает запрос на получение всех Post с нужной категорией
 func (handler *PostsHandler) GetAllByCategory(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	category := vars["category_name"]
@@ -130,6 +135,7 @@ func (handler *PostsHandler) GetAllByCategory(w http.ResponseWriter, r *http.Req
 	w.WriteHeader(http.StatusOK)
 }
 
+// Get обрабатывает запрос на получение Post
 func (handler *PostsHandler) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -173,6 +179,7 @@ func (handler *PostsHandler) Get(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// AddComment обрабатывает запрос на добавление Comment к Post
 func (handler *PostsHandler) AddComment(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -216,6 +223,7 @@ func (handler *PostsHandler) AddComment(w http.ResponseWriter, r *http.Request) 
 	w.WriteHeader(http.StatusCreated)
 }
 
+// DeleteComment обрабатывает запрос на удаление Comment
 func (handler *PostsHandler) DeleteComment(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -238,6 +246,7 @@ func (handler *PostsHandler) DeleteComment(w http.ResponseWriter, r *http.Reques
 	w.WriteHeader(http.StatusOK)
 }
 
+// Vote обрабатывает запрос на оценку Post
 func (handler *PostsHandler) Vote(voteType vote.Type) http.Handler {
 	var path string
 
@@ -296,6 +305,7 @@ func (handler *PostsHandler) Vote(voteType vote.Type) http.Handler {
 	})
 }
 
+// Delete обрабатывает запрос на удаление Post
 func (handler *PostsHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -319,6 +329,7 @@ func (handler *PostsHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// GetAllByUserName обрабатывает запрос на получение всех Post для нужного UserName
 func (handler *PostsHandler) GetAllByUserName(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userName := vars["user_login"]

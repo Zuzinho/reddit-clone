@@ -7,6 +7,7 @@ import (
 
 var jwtSecretKey = []byte("Zuzinho secret key")
 
+// PackToken запаковывает Session в токен
 func PackToken(s *Session) (string, error) {
 	payload := jwt.MapClaims{
 		"sub": s.UserID,
@@ -23,6 +24,7 @@ func PackToken(s *Session) (string, error) {
 	return tokenString, nil
 }
 
+// UnpackToken развертывает токен в Session
 func UnpackToken(tokenString string) (*Session, error) {
 	hashSecretGetter := func(token *jwt.Token) (interface{}, error) {
 		method, ok := token.Method.(*jwt.SigningMethodHMAC)

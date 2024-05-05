@@ -2,11 +2,13 @@ package vote
 
 import "sync"
 
+// VotesMemoryRepository реализует интерфейс VotesRepo
 type VotesMemoryRepository struct {
 	mu    *sync.RWMutex
 	votes map[keyType]*Vote
 }
 
+// NewVotesMemoryRepository создает экземпляр VotesMemoryRepository
 func NewVotesMemoryRepository() *VotesMemoryRepository {
 	return &VotesMemoryRepository{
 		mu:    &sync.RWMutex{},
@@ -14,6 +16,7 @@ func NewVotesMemoryRepository() *VotesMemoryRepository {
 	}
 }
 
+// Create создает и добавляет Vote
 func (repo *VotesMemoryRepository) Create(postID, userID string, tp Type) *Vote {
 	k := newKeyType(postID, userID)
 	v := NewVote(postID, userID, tp)
@@ -25,6 +28,7 @@ func (repo *VotesMemoryRepository) Create(postID, userID string, tp Type) *Vote 
 	return v
 }
 
+// Delete удаляет Vote
 func (repo *VotesMemoryRepository) Delete(postID, userID string) {
 	k := newKeyType(postID, userID)
 
@@ -33,6 +37,7 @@ func (repo *VotesMemoryRepository) Delete(postID, userID string) {
 	repo.mu.Unlock()
 }
 
+// GetAllByPostID возвращает Votes для Post
 func (repo *VotesMemoryRepository) GetAllByPostID(postID string) *Votes {
 	votes := make(Votes, 0)
 
@@ -47,6 +52,7 @@ func (repo *VotesMemoryRepository) GetAllByPostID(postID string) *Votes {
 	return &votes
 }
 
+// DeleteByPostID удаляет Votes для Post
 func (repo *VotesMemoryRepository) DeleteByPostID(postID string) {
 	repo.mu.Lock()
 	for k := range repo.votes {

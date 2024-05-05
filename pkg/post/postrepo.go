@@ -5,11 +5,13 @@ import (
 	"sync"
 )
 
+// PostsMemoryRepository реализует интерфейс PostsRepo
 type PostsMemoryRepository struct {
 	mu    *sync.RWMutex
 	posts map[string]*Post
 }
 
+// NewPostsMemoryRepository создает экземпляр PostsMemoryRepository
 func NewPostsMemoryRepository() *PostsMemoryRepository {
 	return &PostsMemoryRepository{
 		mu:    &sync.RWMutex{},
@@ -17,6 +19,7 @@ func NewPostsMemoryRepository() *PostsMemoryRepository {
 	}
 }
 
+// Create создает и добавляет Post
 func (repo *PostsMemoryRepository) Create(author *user.User, title, text string, category Category, tp Type) (*Post, error) {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
@@ -31,6 +34,7 @@ func (repo *PostsMemoryRepository) Create(author *user.User, title, text string,
 	return p, nil
 }
 
+// Get возвращает Post
 func (repo *PostsMemoryRepository) Get(postID string) (*Post, error) {
 	repo.mu.RLock()
 	p, ok := repo.posts[postID]
@@ -57,18 +61,21 @@ func (repo *PostsMemoryRepository) filter(condition func(post *Post) bool) *Post
 	return &posts
 }
 
+// GetAll возвращает все Post
 func (repo *PostsMemoryRepository) GetAll() *Posts {
 	return repo.filter(func(*Post) bool {
 		return true
 	})
 }
 
+// GetAllByUserName возвращает Post по UserName
 func (repo *PostsMemoryRepository) GetAllByUserName(userName string) *Posts {
 	return repo.filter(func(post *Post) bool {
 		return post.Author.UserName == userName
 	})
 }
 
+// GetAllByCategory возвращает Post по Category
 func (repo *PostsMemoryRepository) GetAllByCategory(category Category) (*Posts, error) {
 	err := category.Valid()
 	if err != nil {
@@ -80,6 +87,7 @@ func (repo *PostsMemoryRepository) GetAllByCategory(category Category) (*Posts, 
 	}), nil
 }
 
+// Delete удаляет Post
 func (repo *PostsMemoryRepository) Delete(postID, userID string) error {
 	repo.mu.RLock()
 	p, ok := repo.posts[postID]

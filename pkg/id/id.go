@@ -13,6 +13,7 @@ var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456
 
 const length = 24
 
+// GenerateID генерирует случайный ID
 func GenerateID() string {
 	b := make([]rune, length)
 	for i := range b {

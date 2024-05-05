@@ -5,11 +5,13 @@ import (
 	"sync"
 )
 
+// CommentsMemoryRepository реализует интерфейс CommentsRepo
 type CommentsMemoryRepository struct {
 	mu       *sync.RWMutex
 	comments map[keyType]*Comment
 }
 
+// NewCommentsMemoryRepository создает CommentsMemoryRepository
 func NewCommentsMemoryRepository() *CommentsMemoryRepository {
 	return &CommentsMemoryRepository{
 		mu:       &sync.RWMutex{},
@@ -17,6 +19,7 @@ func NewCommentsMemoryRepository() *CommentsMemoryRepository {
 	}
 }
 
+// Create создает и добавляет в базу Comment
 func (repo *CommentsMemoryRepository) Create(postID string, body string, author *user.User) *Comment {
 	repo.mu.Lock()
 
@@ -30,6 +33,7 @@ func (repo *CommentsMemoryRepository) Create(postID string, body string, author 
 	return c
 }
 
+// Delete удаляет из базы Comment
 func (repo *CommentsMemoryRepository) Delete(postID, commentID, userID string) error {
 	k := newKeyType(postID, commentID)
 
@@ -52,6 +56,7 @@ func (repo *CommentsMemoryRepository) Delete(postID, commentID, userID string) e
 	return nil
 }
 
+// GetAllByPostID возвращает Comments для поста
 func (repo *CommentsMemoryRepository) GetAllByPostID(postID string) *Comments {
 	comments := make(Comments, 0)
 
@@ -66,6 +71,7 @@ func (repo *CommentsMemoryRepository) GetAllByPostID(postID string) *Comments {
 	return &comments
 }
 
+// DeleteByPostID удаляет Comments для поста
 func (repo *CommentsMemoryRepository) DeleteByPostID(postID string) {
 	repo.mu.Lock()
 	for k := range repo.comments {

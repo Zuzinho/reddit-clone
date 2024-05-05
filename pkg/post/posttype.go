@@ -1,5 +1,6 @@
 package post
 
+// Type - тип поста
 type Type string
 
 const (
@@ -7,6 +8,7 @@ const (
 	LinkType Type = "link"
 )
 
+// Valid проверяет валидность Type
 func (tp Type) Valid() error {
 	switch tp {
 	case TextType, LinkType:

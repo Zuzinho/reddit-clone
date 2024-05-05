@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// Comment - тип комментария
 type Comment struct {
 	ID      string     `json:"id"`
 	Body    string     `json:"body"`
@@ -13,6 +14,7 @@ type Comment struct {
 	Created time.Time  `json:"created"`
 }
 
+// NewComment создает тип Comment
 func NewComment(body string, u *user.User) *Comment {
 	return &Comment{
 		ID:      id.GenerateID(),
@@ -22,12 +24,15 @@ func NewComment(body string, u *user.User) *Comment {
 	}
 }
 
+// Comments - массив ссылок на Comment
 type Comments []*Comment
 
+// Append добавляет в Comments ссылку на Comment
 func (comments *Comments) Append(comment *Comment) {
 	*comments = append(*comments, comment)
 }
 
+// CommentsRepo - интерфейс для хранения Comment
 type CommentsRepo interface {
 	Create(postID string, body string, author *user.User) *Comment
 	Delete(postID, commentID, userID string) error

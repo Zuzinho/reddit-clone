@@ -10,10 +10,12 @@ import (
 	"time"
 )
 
+// AppMiddleware - средний слой обработки
 type AppMiddleware struct {
 	reqMap map[string][]*regexp.Regexp
 }
 
+// NewAppMiddleware возвращает экземпляр AppMiddleware
 func NewAppMiddleware() *AppMiddleware {
 	return &AppMiddleware{
 
@@ -34,6 +36,7 @@ func NewAppMiddleware() *AppMiddleware {
 	}
 }
 
+// Authorize проверяет авторизацию (валидность токена авторизации)
 func (middle *AppMiddleware) Authorize(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		regs, ok := middle.reqMap[r.Method]
@@ -80,6 +83,7 @@ func (middle *AppMiddleware) Authorize(next http.Handler) http.Handler {
 	})
 }
 
+// RecoverPanic возвращает приложения из panic
 func (middle *AppMiddleware) RecoverPanic(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
@@ -92,6 +96,7 @@ func (middle *AppMiddleware) RecoverPanic(next http.Handler) http.Handler {
 	})
 }
 
+// PackMiddleware "пакует" обработчик в средний слой
 func (middle *AppMiddleware) PackMiddleware(next http.Handler) http.Handler {
 	return middle.RecoverPanic(
 		middle.Authorize(next))
